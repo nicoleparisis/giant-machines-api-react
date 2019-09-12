@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/mssql/server:latest
+
+ARG SA_PASSWORD
+
+RUN mkdir -p /var/opt/mssql/backup
+
+COPY ./TimeTracker3.bak /var/opt/mssql/backup
+
+RUN /opt/mssql/bin/sqlservr --accept-eula & sleep 30 \
+    && /opt/mssql-tools/bin/sqlcmd -U SA -P $SA_PASSWORD -Q "RESTORE DATABASE TimeTracker FROM DISK = \"/var/opt/mssql/backup/TimeTracker3.bak\" WITH MOVE \"TimeTracker\" TO \"/var/opt/mssql/data/TimeTracker.mdf\", \
+        MOVE \"TimeTracker_log\" TO \"/var/opt/mssql/data/TimeTracker_log.ldf\";" \
+    && pkill sqlservr

@@ -1,7 +1,19 @@
 version: "3.2"
 services:
-  api:
-    build: .
+  mssql:
+    image: "8134801900/giant-machines-mysql:latest"
     ports:
-     - "5001:5001"
-    
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Gmsql!8912"
+      ACCEPT_EULA: "Y"
+  frontend:
+    image: "8134801900/gm-frontend:latest"
+    ports:
+      - "3000:80"
+  api:
+    image: "8134801900/gm-api:latest"
+    ports:
+     - "5000:80"
+    depends_on:
+      - mssql
