@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import './App.css';
+import spinner from './loadingSpinner.gif'
 import BootstrapTable from 'react-bootstrap-table-next';
 import '../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
@@ -15,7 +16,8 @@ class App extends Component {
 			BillableHours: null,
 			NonBillableHours: null,
 			TotalHoursTracked: null,
-			TotalBillableAmount: null
+			TotalBillableAmount: null,
+			isLoading: true
 		};
 
 	}
@@ -25,12 +27,13 @@ class App extends Component {
 			.then((data) => {
 				var flatten = data.flat();
 				this.setState({ TimeSheetEntries: flatten })
-			}).then(() => {
+			}).then(() => {				
 				this.getBillableHours();
 				this.getTotalHoursTracked();
 				this.getTotalBillableAmount();
 				this.getBillableHours();
 				this.getNonBillableHours();
+				this.setState({ isLoading: false })
 			})
 			.catch(console.log)
 	}
@@ -131,11 +134,9 @@ class App extends Component {
 					</div>
 					<div className="col-md-4 col-centered"><h1>{this.state.TotalBillableAmount}</h1></div>
 				</div>
-				<header>
-					<BootstrapTable keyField='id' data={this.state.TimeSheetEntries} columns={columns} />
-					<p>
-						Edit <code>src/App.js</code> and save to reload.
-			</p>
+				<header className="col-centered">
+				    { this.state.isLoading ? <img src={spinner} alt="loading..." /> : null }
+					<BootstrapTable keyField='id' data={this.state.TimeSheetEntries} columns={columns} />					
 				</header>
 			</div>
 		);
