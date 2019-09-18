@@ -21,22 +21,28 @@ class App extends Component {
 		};
 
 	}
-	componentDidMount() {
-		fetch('http://localhost:5000/api/TimeSheetEntry')
-			.then(res => res.json())
-			.then((data) => {
-				var flatten = data.flat();
-				this.setState({ TimeSheetEntries: flatten })
-			}).then(() => {				
-				this.getBillableHours();
-				this.getTotalHoursTracked();
-				this.getTotalBillableAmount();
-				this.getBillableHours();
-				this.getNonBillableHours();
-				this.setState({ isLoading: false })
-			})
-			.catch(console.log)
+	async componentDidMount() {
+		try {
+			const response = await fetch('http://localhost:5000/api/TimeSheetEntry');
+			const data = await response.json();		
+			await this.setStateAsync({ TimeSheetEntries: data })
+				
+			this.getBillableHours();
+			this.getTotalHoursTracked();
+			this.getTotalBillableAmount();
+			this.getBillableHours();
+			this.getNonBillableHours();
+			this.setState({ isLoading: false })
+		}catch (error) {
+			console.log(error);
+	    }
+			
 	}
+	setStateAsync(state) {
+		return new Promise((resolve) => {
+		  this.setState(state, resolve)
+		});
+	  }
 	getTimeSheetEntries(billable) {
 		return this.state.TimeSheetEntries.filter(function (ts) {
 			return ts.billable === billable;
