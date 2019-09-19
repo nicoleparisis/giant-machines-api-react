@@ -51,35 +51,31 @@ class App extends Component {
 	getBillableHours() {
 		var billableTimeSheetEntries = this.getTimeSheetEntries(true);
 		var billableHours = 0;
-		billableTimeSheetEntries.map(function (ts) {
-			billableHours += ts.billableHours;
-			return ts;
+		billableTimeSheetEntries.forEach(function (ts) {
+			billableHours += ts.billableHours;			
 		});
 		this.setState({ BillableHours: billableHours.toFixed(2) })
 	}
 	getNonBillableHours() {
 		var billableTimeSheetEntries = this.getTimeSheetEntries(false);
 		var nonBillableHours = 0;
-		billableTimeSheetEntries.map(function (ts) {
-			nonBillableHours += ts.hoursRounded;
-			return ts;
+		billableTimeSheetEntries.forEach(function (ts) {
+			nonBillableHours += ts.hoursRounded;			
 		});
 		this.setState({ NonBillableHours: nonBillableHours.toFixed(2) })
 	}
 	getTotalHoursTracked() {
 		var totalHours = 0;
-		this.state.TimeSheetEntries.map(function (ts) {
-			totalHours += ts.hoursRounded;
-			return ts;
+		this.state.TimeSheetEntries.forEach(function (ts) {
+			totalHours += ts.hoursRounded;			
 		});
 		this.setState({ TotalHoursTracked: totalHours.toFixed(2) })
 	}
 	getTotalBillableAmount() {
 		var billableTimeSheetEntries = this.getTimeSheetEntries(true);
 		var billableAmount = 0;
-		billableTimeSheetEntries.map(function (ts) {
-			billableAmount += ts.billableAmount;
-			return ts;
+		billableTimeSheetEntries.forEach(function (ts) {
+			billableAmount += ts.billableAmount;			
 		});
 		this.setState({ TotalBillableAmount: "$" + billableAmount.toFixed(2) })
 	}
